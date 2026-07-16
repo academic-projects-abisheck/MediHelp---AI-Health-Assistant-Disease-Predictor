@@ -67,3 +67,36 @@ Developing a production-ready medical helper tool in a single week required tack
     python app.py
     ```
     Access the app at **[http://127.0.0.1:5000](http://127.0.0.1:5000)**!
+
+
+
+## 📸 User Interface Screenshots
+
+
+#### Home Page - Hero Section
+<img width="1627" height="862" alt="image" src="https://github.com/user-attachments/assets/8c37aaee-92b0-428e-8f99-947a3abe7c09" />
+
+
+#### Login - Unique Token Generated
+
+<img width="1592" height="663" alt="image" src="https://github.com/user-attachments/assets/abb31103-cb86-4185-bd7c-b0212af2ba1c" />
+
+
+#### Home Page - General Info. & Footer
+<img width="832" height="851" alt="image" src="https://github.com/user-attachments/assets/48b1609f-3df9-4c1f-a0cd-10e4bd32005b" />
+
+
+#### Chatbot MediHelp
+<img width="956" height="786" alt="image" src="https://github.com/user-attachments/assets/af51fbbc-fadb-4d9e-a424-e2df28ad4ae2" />
+
+<img width="1813" height="891" alt="image" src="https://github.com/user-attachments/assets/3bbf6db4-45a7-4f6e-9916-880df7fe5bf1" />
+
+#### Personalized Review 
+<img width="703" height="862" alt="image" src="https://github.com/user-attachments/assets/5ec96102-908d-42ab-a9af-836e34353e53" />
+
+
+#### Medical Diagnostic Assistant
+<img width="1708" height="807" alt="image" src="https://github.com/user-attachments/assets/87fd168a-771f-46f5-8695-d97194507a38" />
+
+#### Health Assessment Page
+<img width="588" height="815" alt="image" src="https://github.com/user-attachments/assets/ff10fe3f-53e6-45c1-8b9f-e598310b0e49" />
