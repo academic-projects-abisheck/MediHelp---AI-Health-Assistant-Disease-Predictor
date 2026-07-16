@@ -1,0 +1,40 @@
+# Python bytecode & cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+bin/
+lib/
+include/
+
+# Environment configurations (Sensitive API keys/secrets)
+.env
+.env.local
+.env.*.local
+
+# Database / Storage (if local storage directories exist)
+*.db
+*.sqlite
+
+# IDE / Editor Configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS generated files
+Thumbs.db
+desktop.ini
+.DS_Store

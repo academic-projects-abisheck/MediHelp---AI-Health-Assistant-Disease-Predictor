@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Health Assistant - MediHelp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #12ac8e;
+            --primary-dark: #0d846c;
+            --secondary-color: #005792;
+            --bg-glass: rgba(255, 255, 255, 0.9);
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --user-bubble: #e1f5fe;
+            --bot-bubble: #e8f8f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 80vh;
+            background: var(--bg-glass);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Header Styling */
+        .chat-header {
+            padding: 20px 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .bot-title h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .bot-title p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Chat Messages Body */
+        .chat-messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            position: relative;
+            animation: messageSlideIn 0.3s ease-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: var(--bot-bubble);
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(18, 172, 142, 0.15);
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #e1f5fe, #b3e5fc);
+            color: #0b4f6c;
+            border-bottom-right-radius: 4px;
+            border: 1px solid rgba(0, 87, 146, 0.15);
+        }
+
+        /* Suggestion Pills */
+        .suggestions-container {
+            padding: 15px 30px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            background: rgba(255, 255, 255, 0.7);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            scrollbar-width: thin;
+        }
+
+        .suggestion-pill {
+            background: white;
+            color: var(--secondary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid rgba(0, 87, 146, 0.15);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .suggestion-pill:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 87, 146, 0.15);
+        }
+
+        /* Input Form */
+        .chat-input-form {
+            padding: 20px 30px;
+            background: white;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(18, 172, 142, 0.15);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(18, 172, 142, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(18, 172, 142, 0.4);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Typing Indicator Animation */
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: var(--bot-bubble);
+            padding: 15px 25px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(18, 172, 142, 0.15);
+            align-items: center;
+            gap: 5px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .disclaimer-bar {
+            background: rgba(231, 76, 60, 0.08);
+            color: #c0392b;
+            padding: 8px 30px;
+            font-size: 0.78rem;
+            text-align: center;
+            border-top: 1px solid rgba(231, 76, 60, 0.15);
+            font-weight: 500;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes messageSlideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes wave {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+
+        /* Scrollbar aesthetics */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(18, 172, 142, 0.2);
+            border-radius: 10px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(18, 172, 142, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-info">
+                <div class="bot-avatar">
+                    <i class="ri-customer-service-2-line"></i>
+                </div>
+                <div class="bot-title">
+                    <h2>MediHelp AI Assistant</h2>
+                    <p>Powered by Gemini | Online</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{{ url_for('dashboard') }}" class="action-btn" title="Dashboard">
+                    <i class="ri-dashboard-line"></i>
+                </a>
+                <a href="{{ url_for('index') }}" class="action-btn" title="Home">
+                    <i class="ri-home-4-line"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                Hello <strong>{{ username }}</strong>! I am your MediHelp Health Assistant. How can I help you today?
+                <br><br>
+                You can ask me questions about:
+                <ul>
+                    <li>General medical and wellness advice</li>
+                    <li>How to use our Disease Prediction Services (Cardio, Diabetes, Respiratory)</li>
+                    <li>Symptom advice or information about prescriptions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Suggestions Pills -->
+        <div class="suggestions-container">
+            <div class="suggestion-pill" onclick="sendSuggestion('How do I check my diabetes risk?')">How do I check my diabetes risk?</div>
+            <div class="suggestion-pill" onclick="sendSuggestion('What inputs does the cardiovascular tool require?')">Cardio Tool requirements?</div>
+            <div class="suggestion-pill" onclick="sendSuggestion('What are common preventative actions for heart disease?')">Prevent heart disease?</div>
+            <div class="suggestion-pill" onclick="sendSuggestion('What is BMI and how does it affect diabetes?')">BMI & Diabetes?</div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+
+        <!-- Input Box -->
+        <form class="chat-input-form" id="chatForm" onsubmit="handleSendMessage(event)">
+            <input type="text" class="chat-input" id="messageInput" placeholder="Ask about health conditions, symptoms, or our services..." autocomplete="off" required>
+            <button type="submit" class="send-btn" id="sendBtn">
+                <i class="ri-send-plane-2-fill"></i>
+            </button>
+        </form>
+
+        <!-- Safety Disclaimer -->
+        <div class="disclaimer-bar">
+            ⚠️ Disclaimer: MediHelp AI is an informational tool. It does not provide medical diagnostics. In case of emergency, contact your physician immediately.
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const chatForm = document.getElementById('chatForm');
+        
+        let conversationHistory = [];
+
+        // Auto-scroll to bottom of chat
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Add a message bubble to the chat
+        function appendMessage(role, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            // Handle markdown-like bullet formatting safely
+            let formattedText = text
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/- (.*?)(<br>|$)/g, '<li>$1</li>');
+                
+            if (formattedText.includes('<li>')) {
+                formattedText = formattedText.replace(/(<li>.*?<\/li>)/g, '<ul>$1</ul>').replace(/<\/ul><ul>/g, '');
+            }
+
+            messageDiv.innerHTML = formattedText;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Send suggesting pill value
+        function sendSuggestion(text) {
+            messageInput.value = text;
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+
+        // Handle sending the message
+        async function handleSendMessage(event) {
+            event.preventDefault();
+            const messageText = messageInput.value.trim();
+            if (!messageText) return;
+
+            // Display user message
+            appendMessage('user', messageText);
+            messageInput.value = '';
+
+            // Show typing indicator
+            typingIndicator.style.display = 'flex';
+            scrollToBottom();
+
+            // Prepare payload
+            const payload = {
+                message: messageText,
+                history: conversationHistory
+            };
+
+            // Record message in history
+            conversationHistory.push({ role: 'user', content: messageText });
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                // Hide typing indicator
+                typingIndicator.style.display = 'none';
+
+                if (response.ok) {
+                    appendMessage('bot', data.response);
+                    conversationHistory.push({ role: 'model', content: data.response });
+                } else {
+                    const errorMsg = data.error || 'Failed to retrieve response from health assistant.';
+                    appendMessage('bot', `❌ Error: ${errorMsg}`);
+                }
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                appendMessage('bot', `❌ Connection Error: Could not connect to chatbot services.`);
+            }
+        }
+    </script>
+</body>
+</html>
