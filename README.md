@@ -90,7 +90,6 @@ Developing a production-ready medical helper tool in a single week required tack
 <img width="956" height="786" alt="image" src="https://github.com/user-attachments/assets/af51fbbc-fadb-4d9e-a424-e2df28ad4ae2" />
 
 
-
 #### Personalized Review 
 <img width="703" height="862" alt="image" src="https://github.com/user-attachments/assets/5ec96102-908d-42ab-a9af-836e34353e53" />
 
